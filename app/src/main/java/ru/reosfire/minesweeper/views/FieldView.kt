@@ -33,6 +33,10 @@ class FieldView @JvmOverloads constructor(
 
     private val backgroundColorFirst = Paint(Paint.ANTI_ALIAS_FLAG)
     private val backgroundColorSecond = Paint(Paint.ANTI_ALIAS_FLAG)
+    private val highlightPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        color = Color.WHITE
+        style = Paint.Style.STROKE
+    }
 
 
     init {
@@ -49,6 +53,9 @@ class FieldView @JvmOverloads constructor(
 
     private var cellSize = 0f
     private var gridArea = RectF(0f, 0f, 0f, 0f)
+
+    private var selectedX = -1
+    private var selectedY = -1
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
@@ -93,33 +100,67 @@ class FieldView @JvmOverloads constructor(
             }
         }
 
+        if (!isInvalidSelected()) {
+            canvas.drawRect(selectedX * cellSize + gridArea.left, selectedY * cellSize + gridArea.top,
+                (selectedX + 1) * cellSize + gridArea.left, (selectedY + 1) * cellSize + gridArea.top,
+                highlightPaint)
+        }
+
         super.onDraw(canvas)
     }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         if (event == null) return false
-        val field = gameField ?: return false
+        if (gameField == null) return false
 
-        when (event.action) {
-            MotionEvent.ACTION_DOWN -> return true
-            MotionEvent.ACTION_UP -> {
-                val inGridX = event.x - gridArea.left
-                val inGridY = event.y - gridArea.top
-
-                val x = (inGridX / cellSize).toInt()
-                val y = (inGridY / cellSize).toInt()
-
-                if (x < 0 || y < 0 || x >= field.width || y >= field.height) return false
-
-                field.set(y, x, FlagCell())
-
-                return true
+        return when (event.action) {
+            MotionEvent.ACTION_DOWN -> true
+            MotionEvent.ACTION_MOVE -> {
+                updateSelectedCell(event)
+                true
             }
-            else -> return false
+            MotionEvent.ACTION_UP -> {
+                updateSelectedCell(event)
+                performClick()
+                true
+            }
+
+            else -> false
         }
     }
 
+    private fun updateSelectedCell(event: MotionEvent) {
+        val x = getGameX(event.x)
+        val y = getGameY(event.y)
+        if (x != selectedX || y != selectedY) invalidate()
+        selectedX = x
+        selectedY = y
+    }
+
+    private fun isInvalidSelected():Boolean {
+        val field = gameField ?: return false
+        return selectedX < 0 || selectedY < 0 || selectedX >= field.width || selectedY >= field.height
+    }
+
+    private fun getGameX(componentX: Float): Int {
+        val inGridX = componentX - gridArea.left
+        if (inGridX < 0) return -1
+        return (inGridX / cellSize).toInt()
+    }
+    private fun getGameY(componentY: Float): Int {
+        val inGridY = componentY - gridArea.top
+        if (inGridY < 0) return -1
+        return (inGridY / cellSize).toInt()
+    }
+
     override fun performClick(): Boolean {
-        return super.performClick()
+        val field = gameField ?: return super.performClick()
+
+        if (isInvalidSelected())
+            return super.performClick()
+
+        field.set(selectedY, selectedX, FlagCell())
+
+        return true
     }
 }
