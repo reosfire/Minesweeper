@@ -1,0 +1,8 @@
+<resources>
+    <declare-styleable name="FieldView">
+        <attr name="background_color_first" format="color"/>
+        <attr name="background_color_second" format="color"/>
+    </declare-styleable>
+
+    <attr name="FieldViewStyle" format="reference"/>
+</resources>

@@ -6,14 +6,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".MainActivity">
-    <ru.reosfire.minesweeper.views.FieldView
-            android:id="@+id/gameField"
+
+    <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/fragmentContainer"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintWidth="match_parent"
-            app:layout_constraintHeight="match_parent"/>
+            android:name="ru.reosfire.minesweeper.fragments.MainFragment"
+            tools:layout="@layout/fragment_main"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
