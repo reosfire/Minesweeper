@@ -31,8 +31,8 @@ class FieldView @JvmOverloads constructor(
             invalidate()
         }
 
-    private val backgroundColorFirst = Paint()
-    private val backgroundColorSecond = Paint()
+    private val backgroundColorFirst = Paint(Paint.ANTI_ALIAS_FLAG)
+    private val backgroundColorSecond = Paint(Paint.ANTI_ALIAS_FLAG)
 
 
     init {

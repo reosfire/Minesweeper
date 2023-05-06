@@ -8,23 +8,20 @@ import android.graphics.Rect
 class NumberCell(private val number: Int): Cell() {
     companion object {
         val paints = arrayOf(
-            Paint().apply {
+            Paint(Paint.ANTI_ALIAS_FLAG).apply {
                 color = Color.rgb(150, 0, 0)
                 textSize = 100f
                 textAlign = Paint.Align.CENTER
-                flags = Paint.ANTI_ALIAS_FLAG
             },
-            Paint().apply {
+            Paint(Paint.ANTI_ALIAS_FLAG).apply {
                 color = Color.rgb(0, 150, 0)
                 textSize = 100f
                 textAlign = Paint.Align.CENTER
-                flags = Paint.ANTI_ALIAS_FLAG
             },
-            Paint().apply {
+            Paint(Paint.ANTI_ALIAS_FLAG).apply {
                 color = Color.rgb(0, 0, 150)
                 textSize = 100f
                 textAlign = Paint.Align.CENTER
-                flags = Paint.ANTI_ALIAS_FLAG
             })
 
         private val bounds = Rect()
