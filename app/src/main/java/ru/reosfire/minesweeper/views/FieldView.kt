@@ -1,18 +1,19 @@
 package ru.reosfire.minesweeper.views
 
 import android.content.Context
-import android.content.res.TypedArray
-import android.graphics.*
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
+import android.graphics.RectF
 import android.util.AttributeSet
+import android.view.MotionEvent
 import android.view.View
 import ru.reosfire.minesweeper.R
-import ru.reosfire.minesweeper.field.cells.EmptyCell
+import ru.reosfire.minesweeper.field.Field
 import ru.reosfire.minesweeper.field.cells.FlagCell
-import ru.reosfire.minesweeper.field.cells.NumberCell
-import ru.reosfire.minesweeper.game.Game
-import ru.reosfire.minesweeper.game.GameSettings
-import java.util.*
 import kotlin.math.min
+
+typealias OnCellClicked = (Int, Int) -> Void
 
 class FieldView @JvmOverloads constructor(
     context: Context,
@@ -20,18 +21,19 @@ class FieldView @JvmOverloads constructor(
     defStyleAttr: Int = R.attr.FieldViewStyle,
     defStyleRes: Int = R.style.DefaultFieldStyle
 ) : View(context, attrs, defStyleAttr, defStyleRes) {
-    private val backgroundColorFirst = Paint()
-    private val backgroundColorSecond = Paint()
-
-    var game: Game? = null
+    var gameField: Field? = null
         set(value) {
-            field?.getField()?.unsubscribeFromUpdates()
+            field?.unsubscribeFromUpdates()
             field = value
-            field?.getField()?.subscribeToUpdates {
+            field?.subscribeToUpdates {
                 invalidate()
             }
             invalidate()
         }
+
+    private val backgroundColorFirst = Paint()
+    private val backgroundColorSecond = Paint()
+
 
     init {
         context.obtainStyledAttributes(attrs, R.styleable.FieldView, defStyleAttr, defStyleRes).apply {
@@ -42,23 +44,6 @@ class FieldView @JvmOverloads constructor(
                 color = getColor(R.styleable.FieldView_background_color_second, Color.BLACK)
             }
         }.recycle()
-
-        if (isInEditMode) {
-            game = Game(GameSettings(10, 5, 20))
-
-            val rnd = Random()
-            with(game!!) {
-                for (i in 0 until this.getField().height) {
-                    for (j in 0 until this.getField().width) {
-                        when (rnd.nextInt(5)) {
-                            0 -> getField().set(i, j, FlagCell())
-                            1 -> getField().set(i, j, NumberCell(rnd.nextInt(9) + 1))
-                            else -> getField().set(i, j, EmptyCell())
-                        }
-                    }
-                }
-            }
-        }
     }
 
 
@@ -67,7 +52,7 @@ class FieldView @JvmOverloads constructor(
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
-        val field = game?.getField() ?: return
+        val field = gameField ?: return
 
         val availW = w - paddingLeft - paddingRight
         val availH = h - paddingTop - paddingBottom
@@ -94,7 +79,7 @@ class FieldView @JvmOverloads constructor(
     }
     override fun onDraw(canvas: Canvas?) {
         if (canvas == null) return
-        val field = game?.getField() ?: return
+        val field = gameField ?: return
 
         for (i in 0 until field.height) {
             for (j in 0 until field.width) {
@@ -109,5 +94,32 @@ class FieldView @JvmOverloads constructor(
         }
 
         super.onDraw(canvas)
+    }
+
+    override fun onTouchEvent(event: MotionEvent?): Boolean {
+        if (event == null) return false
+        val field = gameField ?: return false
+
+        when (event.action) {
+            MotionEvent.ACTION_DOWN -> return true
+            MotionEvent.ACTION_UP -> {
+                val inGridX = event.x - gridArea.left
+                val inGridY = event.y - gridArea.top
+
+                val x = (inGridX / cellSize).toInt()
+                val y = (inGridY / cellSize).toInt()
+
+                if (x < 0 || y < 0 || x >= field.width || y >= field.height) return false
+
+                field.set(y, x, FlagCell())
+
+                return true
+            }
+            else -> return false
+        }
+    }
+
+    override fun performClick(): Boolean {
+        return super.performClick()
     }
 }

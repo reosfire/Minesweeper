@@ -11,23 +11,25 @@ import ru.reosfire.minesweeper.field.cells.FlagCell
 import ru.reosfire.minesweeper.field.cells.NumberCell
 import ru.reosfire.minesweeper.game.Game
 import ru.reosfire.minesweeper.game.GameSettings
-import java.util.Random
+import java.util.*
 
 class GameFragment: Fragment() {
     private lateinit var binding: FragmentGameBinding
+    private lateinit var game: Game
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentGameBinding.inflate(inflater, container, false)
 
-        binding.gameField.game = Game(GameSettings(10, 5, 20))
+        game = Game(GameSettings(10, 5, 20))
+        binding.gameField.gameField = game.getField()
 
         val rnd = Random()
-        with(binding.gameField.game!!) {
-            for (i in 0 until this.getField().height) {
-                for (j in 0 until this.getField().width) {
+        with(binding.gameField.gameField!!) {
+            for (i in 0 until height) {
+                for (j in 0 until width) {
                     when (rnd.nextInt(5)) {
-                        0 -> getField().set(i, j, FlagCell())
-                        1 -> getField().set(i, j, NumberCell(rnd.nextInt(9) + 1))
-                        else -> getField().set(i, j, EmptyCell())
+                        0 -> set(i, j, FlagCell())
+                        1 -> set(i, j, NumberCell(rnd.nextInt(9) + 1))
+                        else -> set(i, j, EmptyCell())
                     }
                 }
             }
