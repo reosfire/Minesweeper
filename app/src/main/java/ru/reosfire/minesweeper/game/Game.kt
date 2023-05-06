@@ -10,6 +10,10 @@ class Game(private val settings: GameSettings) {
     private val mines = Array(settings.height) { BitSet(settings.width) }
     private var started = false
 
+    public fun getField(): Field {
+        return field
+    }
+
     fun open(x: Int, y: Int): OpenResult {
         if (!started) fillMinesWithout(x, y)
         if (mines[x][y]) return OpenResult.Loose

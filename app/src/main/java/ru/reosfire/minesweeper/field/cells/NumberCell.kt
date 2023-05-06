@@ -4,7 +4,6 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Rect
-import android.util.Log
 
 class NumberCell(private val number: Int): Cell() {
     companion object {
@@ -13,16 +12,19 @@ class NumberCell(private val number: Int): Cell() {
                 color = Color.rgb(150, 0, 0)
                 textSize = 100f
                 textAlign = Paint.Align.CENTER
+                flags = Paint.ANTI_ALIAS_FLAG
             },
             Paint().apply {
                 color = Color.rgb(0, 150, 0)
                 textSize = 100f
                 textAlign = Paint.Align.CENTER
+                flags = Paint.ANTI_ALIAS_FLAG
             },
             Paint().apply {
                 color = Color.rgb(0, 0, 150)
                 textSize = 100f
                 textAlign = Paint.Align.CENTER
+                flags = Paint.ANTI_ALIAS_FLAG
             })
 
         private val bounds = Rect()

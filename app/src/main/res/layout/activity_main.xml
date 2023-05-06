@@ -7,6 +7,7 @@
         android:layout_height="match_parent"
         tools:context=".MainActivity">
     <ru.reosfire.minesweeper.views.FieldView
+            android:id="@+id/gameField"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -14,6 +15,5 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintWidth="match_parent"
-            app:layout_constraintHeight="match_parent"
-    />
+            app:layout_constraintHeight="match_parent"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
