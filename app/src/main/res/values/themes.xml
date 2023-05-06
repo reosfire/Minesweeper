@@ -12,5 +12,12 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+        
+        <item name="FieldViewStyle">@style/DefaultFieldStyle</item>
+    </style>
+    
+    <style name="DefaultFieldStyle">
+        <item name="background_color_first">#323232</item>
+        <item name="background_color_second">#464646</item>
     </style>
 </resources>

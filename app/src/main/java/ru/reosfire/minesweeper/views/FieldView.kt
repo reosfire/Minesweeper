@@ -1,24 +1,27 @@
 package ru.reosfire.minesweeper.views
 
 import android.content.Context
+import android.content.res.TypedArray
 import android.graphics.*
 import android.util.AttributeSet
 import android.view.View
+import ru.reosfire.minesweeper.R
+import ru.reosfire.minesweeper.field.cells.EmptyCell
+import ru.reosfire.minesweeper.field.cells.FlagCell
+import ru.reosfire.minesweeper.field.cells.NumberCell
 import ru.reosfire.minesweeper.game.Game
+import ru.reosfire.minesweeper.game.GameSettings
+import java.util.*
 import kotlin.math.min
 
 class FieldView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
-    defStyleAttr: Int = 0,
-    defStyleRes: Int = 0
+    defStyleAttr: Int = R.attr.FieldViewStyle,
+    defStyleRes: Int = R.style.DefaultFieldStyle
 ) : View(context, attrs, defStyleAttr, defStyleRes) {
-    private val black = Paint().apply {
-        color = Color.rgb(50, 50, 50)
-    }
-    private val white = Paint().apply {
-        color = Color.rgb(150, 150, 150)
-    }
+    private val backgroundColorFirst = Paint()
+    private val backgroundColorSecond = Paint()
 
     var game: Game? = null
         set(value) {
@@ -29,6 +32,34 @@ class FieldView @JvmOverloads constructor(
             }
             invalidate()
         }
+
+    init {
+        context.obtainStyledAttributes(attrs, R.styleable.FieldView, defStyleAttr, defStyleRes).apply {
+            backgroundColorFirst.apply {
+                color = getColor(R.styleable.FieldView_background_color_first, Color.BLACK)
+            }
+            backgroundColorSecond.apply {
+                color = getColor(R.styleable.FieldView_background_color_second, Color.BLACK)
+            }
+        }.recycle()
+
+        if (isInEditMode) {
+            game = Game(GameSettings(10, 5, 20))
+
+            val rnd = Random()
+            with(game!!) {
+                for (i in 0 until this.getField().height) {
+                    for (j in 0 until this.getField().width) {
+                        when (rnd.nextInt(5)) {
+                            0 -> getField().set(i, j, FlagCell())
+                            1 -> getField().set(i, j, NumberCell(rnd.nextInt(9) + 1))
+                            else -> getField().set(i, j, EmptyCell())
+                        }
+                    }
+                }
+            }
+        }
+    }
 
 
     private var cellSize = 0f
@@ -49,7 +80,13 @@ class FieldView @JvmOverloads constructor(
         val gridHeight = cellSize * field.height
         val gridWidth = cellSize * field.width
 
-        gridArea = RectF(0f, 0f, gridWidth, gridHeight)
+        val emptyH = availH - gridHeight
+        val emptyW = availW - gridWidth
+
+        val left = emptyW / 2
+        val top = emptyH / 2
+
+        gridArea = RectF(left, top, left + gridWidth, top + gridHeight)
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -61,7 +98,7 @@ class FieldView @JvmOverloads constructor(
 
         for (i in 0 until field.height) {
             for (j in 0 until field.width) {
-                val paint = if ((i + j) % 2 == 0) black else white
+                val paint = if ((i + j) % 2 == 0) backgroundColorFirst else backgroundColorSecond
 
                 canvas.drawRect(gridArea.left + j * cellSize, gridArea.top + i * cellSize,
                     gridArea.left + (j + 1) * cellSize, gridArea.top + (i + 1) * cellSize, paint)

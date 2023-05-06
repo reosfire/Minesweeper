@@ -7,7 +7,7 @@ import android.graphics.Paint
 class FlagCell: Cell() {
     companion object {
         val paint = Paint().apply {
-            color = Color.rgb(200, 10, 10)
+            color = Color.rgb(200, 40, 40)
             style = Paint.Style.FILL
             flags = Paint.ANTI_ALIAS_FLAG
         }
