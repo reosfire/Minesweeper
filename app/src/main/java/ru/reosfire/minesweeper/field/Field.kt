@@ -17,6 +17,13 @@ class Field(val width: Int, val height: Int) {
         updateHandler?.invoke()
     }
 
+    fun setAll(cells: List<Triple<Int, Int, Cell>>) {
+        for (cell in cells) {
+            data[cell.first][cell.second] = cell.third
+        }
+        updateHandler?.invoke()
+    }
+
     fun subscribeToUpdates(handler: FieldUpdateHandler) {
         updateHandler = handler
     }

@@ -10,10 +10,9 @@ import android.view.MotionEvent
 import android.view.View
 import ru.reosfire.minesweeper.R
 import ru.reosfire.minesweeper.field.Field
-import ru.reosfire.minesweeper.field.cells.FlagCell
 import kotlin.math.min
 
-typealias OnCellClicked = (Int, Int) -> Void
+typealias CellClickedListener = (Int, Int) -> Unit
 
 class FieldView @JvmOverloads constructor(
     context: Context,
@@ -30,6 +29,8 @@ class FieldView @JvmOverloads constructor(
             }
             invalidate()
         }
+
+    private var cellClickedListener: CellClickedListener? = null
 
     private val backgroundColorFirst = Paint(Paint.ANTI_ALIAS_FLAG)
     private val backgroundColorSecond = Paint(Paint.ANTI_ALIAS_FLAG)
@@ -153,13 +154,16 @@ class FieldView @JvmOverloads constructor(
         return (inGridY / cellSize).toInt()
     }
 
+    fun setCellClickedListener(listener: CellClickedListener) {
+        cellClickedListener = listener
+    }
+
     override fun performClick(): Boolean {
-        val field = gameField ?: return super.performClick()
+        val result = super.performClick()
 
-        if (isInvalidSelected())
-            return super.performClick()
+        if (isInvalidSelected()) return result
 
-        field.set(selectedY, selectedX, FlagCell())
+        cellClickedListener?.invoke(selectedX, selectedY)
 
         return true
     }
