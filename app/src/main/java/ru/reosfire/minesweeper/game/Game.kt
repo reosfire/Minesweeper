@@ -65,6 +65,7 @@ class Game(private val settings: GameSettings) {
     }
 
     private fun calculateNumber(x: Int, y: Int): Int {
+        if (mines[x][y]) return 0
         var result = 0
 
         for (i in max(0, x - 1)..min(settings.height - 1, x + 1)) {

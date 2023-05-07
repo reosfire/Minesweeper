@@ -13,18 +13,31 @@ import ru.reosfire.minesweeper.game.GameSettings
 import ru.reosfire.minesweeper.game.OpenResult
 
 class GameFragment: Fragment() {
+    companion object {
+        private val SETTINGS_KEY = "game_settings"
+
+        fun create(settings: GameSettings): GameFragment {
+            return GameFragment().apply {
+                arguments = Bundle().apply {
+                    putParcelable(SETTINGS_KEY, settings)
+                }
+            }
+        }
+    }
+
     private lateinit var binding: FragmentGameBinding
     private lateinit var game: Game
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentGameBinding.inflate(inflater, container, false)
 
-        setupGame()
+        val settings = arguments?.getParcelable<GameSettings>(SETTINGS_KEY)
+        if (settings != null) setupGame(settings)
 
         return binding.root
     }
 
-    private fun setupGame() {
-        game = Game(GameSettings(10, 15, 20))
+    private fun setupGame(settings: GameSettings) {
+        game = Game(settings)
         binding.gameField.gameField = game.getField()
 
         binding.gameField.setCellClickedListener { x, y ->
@@ -35,7 +48,7 @@ class GameFragment: Fragment() {
                 game.getField().set(y, x, FlagCell())
             }
             else if (!binding.flagCheckbox.isChecked && game.getField().get(y, x) !is FlagCell) {
-                if (game.open(y, x) == OpenResult.Loose) setupGame()
+                if (game.open(y, x) == OpenResult.Loose) setupGame(settings)
             }
         }
     }

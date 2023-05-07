@@ -18,6 +18,6 @@
     
     <style name="DefaultFieldStyle">
         <item name="background_color_first">#323232</item>
-        <item name="background_color_second">#464646</item>
+        <item name="background_color_second">#3B3B3B</item>
     </style>
 </resources>
