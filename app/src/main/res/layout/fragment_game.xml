@@ -4,8 +4,10 @@
                                                    android:layout_height="match_parent"
                                                    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <Button
+    <ImageButton
             android:id="@+id/backButton"
+            android:background="@drawable/baseline_arrow_back_24"
+            android:backgroundTint="@color/purple_200"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
