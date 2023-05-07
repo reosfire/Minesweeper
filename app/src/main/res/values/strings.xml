@@ -1,4 +1,11 @@
 <resources>
     <string name="app_name">Minesweeper</string>
     <string name="newGameButton">New game</string>
+    <string name="statsButton">stats</string>
+    <string name="openGameSettings">open game settings</string>
+    <string name="height_label">Height:</string>
+    <string name="widthLabel">Width:</string>
+    <string name="mines_label">Mines:</string>
+    <string name="ok_button">OK</string>
+    <string name="cancel_button">Cancel</string>
 </resources>

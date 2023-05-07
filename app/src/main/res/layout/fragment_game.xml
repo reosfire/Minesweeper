@@ -28,6 +28,9 @@
             android:id="@+id/flagCheckbox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:scaleY="1.5"
+            android:scaleX="1.5"
+            android:layout_marginBottom="10dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"/>

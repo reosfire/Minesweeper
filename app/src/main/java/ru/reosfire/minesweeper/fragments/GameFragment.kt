@@ -14,7 +14,7 @@ import ru.reosfire.minesweeper.game.OpenResult
 
 class GameFragment: Fragment() {
     companion object {
-        private val SETTINGS_KEY = "game_settings"
+        private const val SETTINGS_KEY = "game_settings"
 
         fun create(settings: GameSettings): GameFragment {
             return GameFragment().apply {

@@ -7,17 +7,30 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import ru.reosfire.minesweeper.R
 import ru.reosfire.minesweeper.databinding.FragmentMainBinding
+import ru.reosfire.minesweeper.fragments.dialogs.GameSettingsDialog
 import ru.reosfire.minesweeper.game.GameSettings
 
 class MainFragment: Fragment() {
     private lateinit var binding: FragmentMainBinding
+    private lateinit var settings: GameSettings
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentMainBinding.inflate(inflater, container, false)
+
+        settings = GameSettings(10, 15, 20)
+
         binding.newGameButton.setOnClickListener {
             parentFragmentManager.beginTransaction()
-                .addToBackStack("ABOBA")
-                .add(R.id.fragmentContainer, GameFragment.create(GameSettings(10, 15, 20)))
+                .addToBackStack(null)
+                .add(R.id.fragmentContainer, GameFragment.create(settings))
                 .commit()
+        }
+
+        binding.gameSettingsButton.setOnClickListener {
+            val dialog = GameSettingsDialog.create(settings)
+            dialog.setResultListener {
+                settings = it
+            }
+            dialog.show(parentFragmentManager, "TAGTAG")
         }
 
         return binding.root
