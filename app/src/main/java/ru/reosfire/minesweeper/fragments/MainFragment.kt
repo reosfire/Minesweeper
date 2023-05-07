@@ -12,13 +12,21 @@ import ru.reosfire.minesweeper.fragments.dialogs.GameSettingsDialog
 import ru.reosfire.minesweeper.game.GameSettings
 
 class MainFragment: Fragment() {
+    companion object {
+        private const val SETTINGS_KEY = "game_settings"
+    }
+
     private lateinit var binding: FragmentMainBinding
     private lateinit var settings: GameSettings
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        settings = savedInstanceState?.getParcelable(SETTINGS_KEY) ?: GameSettings(10, 15, 20)
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentMainBinding.inflate(inflater, container, false)
-
-        settings = GameSettings(10, 15, 20)
 
         binding.newGameButton.setOnClickListener {
             parentFragmentManager.commit {
@@ -36,5 +44,10 @@ class MainFragment: Fragment() {
         }
 
         return binding.root
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putParcelable(SETTINGS_KEY, settings)
     }
 }
