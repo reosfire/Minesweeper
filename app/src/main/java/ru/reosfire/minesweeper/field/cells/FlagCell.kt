@@ -6,10 +6,19 @@ import android.graphics.Paint
 
 class FlagCell: Cell() {
     companion object {
-        val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        private val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
             color = Color.rgb(200, 40, 40)
             style = Paint.Style.FILL
         }
+
+        private val colors = intArrayOf(Color.rgb(200, 10, 10),
+            Color.rgb(200, 10, 10),
+            Color.rgb(200, 10, 10),
+            Color.rgb(200, 10, 10),
+            Color.rgb(200, 10, 10),
+            Color.rgb(200, 10, 10))
+
+        private val vertices = FloatArray(6)
     }
 
     override fun renderTo(canvas: Canvas, xStart: Float, yStart: Float, xEnd: Float, yEnd: Float) {
@@ -20,26 +29,24 @@ class FlagCell: Cell() {
         val centerH = (yEnd - yStart) / 2 + yStart
         canvas.drawRect(centerW - lineW / 2, centerH - lineH / 2, centerW + lineW / 2, centerH + lineH / 2, paint)
 
-        val vertices = floatArrayOf(
-            centerW - lineW / 2 + 1, centerH - lineH / 2,
-            centerW - lineW / 2 + 40, centerH - lineH / 4,
-            centerW - lineW / 2 + 1, centerH)
+        vertices[0] = centerW - lineW / 2 + 1
+        vertices[1] = centerH - lineH / 2
+
+        vertices[2] = centerW - lineW / 2 + lineH / 2
+        vertices[3] = centerH - lineH / 4
+
+        vertices[4] = centerW - lineW / 2 + 1
+        vertices[5] = centerH
 
         canvas.drawVertices(Canvas.VertexMode.TRIANGLES, vertices.size,
             vertices, 0,
             null,
             0,
-            intArrayOf(Color.rgb(200, 10, 10),
-                Color.rgb(200, 10, 10),
-                Color.rgb(200, 10, 10),
-                Color.rgb(200, 10, 10),
-                Color.rgb(200, 10, 10),
-                Color.rgb(200, 10, 10)),
+            colors,
             0,
             null,
             0,
             0,
-            paint
-            )
+            paint)
     }
 }
