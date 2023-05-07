@@ -38,6 +38,13 @@ class NumberCell(private val number: Int): Cell() {
 
         val paint = paints[number % paints.size]
         paint.getTextBounds(number.toString(), 0, 1, bounds)
+
+        val targetH = (yEnd - yStart) * 0.7f
+
+        paint.textSize *= targetH / bounds.height()
+
+        paint.getTextBounds(number.toString(), 0, 1, bounds)
+
         val numberH = bounds.bottom - bounds.top
         val emptyH = yEnd - numberH - yStart
         canvas.drawText(number.toString(), (xStart + xEnd) / 2, yEnd - emptyH / 2, paint)

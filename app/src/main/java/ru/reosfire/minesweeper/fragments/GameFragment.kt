@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import ru.reosfire.minesweeper.databinding.FragmentGameBinding
 import ru.reosfire.minesweeper.field.cells.EmptyCell
@@ -30,6 +31,10 @@ class GameFragment: Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentGameBinding.inflate(inflater, container, false)
 
+        binding.backButton.setOnClickListener {
+            parentFragmentManager.popBackStack()
+        }
+
         val settings = arguments?.getParcelable<GameSettings>(SETTINGS_KEY)
         if (settings != null) setupGame(settings)
 
@@ -48,7 +53,15 @@ class GameFragment: Fragment() {
                 game.getField().set(y, x, FlagCell())
             }
             else if (!binding.flagCheckbox.isChecked && game.getField().get(y, x) !is FlagCell) {
-                if (game.open(y, x) == OpenResult.Loose) setupGame(settings)
+                val openResult = game.open(y, x)
+                if (openResult == OpenResult.Loose) {
+                    setupGame(settings)
+                    Toast.makeText(context, "LOOOSSSEE!!!", Toast.LENGTH_LONG).show()
+                }
+                else if (openResult == OpenResult.Win){
+                    setupGame(settings)
+                    Toast.makeText(context, "WWWIIIIIIINNN!!!", Toast.LENGTH_LONG).show()
+                }
             }
         }
     }

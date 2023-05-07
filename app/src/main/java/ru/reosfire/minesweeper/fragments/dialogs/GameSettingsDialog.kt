@@ -40,6 +40,7 @@ class GameSettingsDialog: DialogFragment() {
         private const val MIN_WIDTH = 6
         private const val DEFAULT_WIDTH = 10
         private const val MIN_MINES = 6
+        private const val DEFAULT_MINES = 10
     }
 
 
@@ -74,10 +75,15 @@ class GameSettingsDialog: DialogFragment() {
         val settings = arguments?.getParcelable<GameSettings>(INITIAL_SETTING_KEY)
         val initialHeight = settings?.height ?: DEFAULT_HEIGHT
         val initialWidth = settings?.width ?: DEFAULT_WIDTH
+        val initialMines = settings?.minesCount ?: DEFAULT_MINES
 
+        binding.heightValue.text = initialHeight.toString()
+        binding.widthValue.text = initialWidth.toString()
+        binding.minesValue.text = initialMines.toString()
 
         binding.heightSeekBar.progress = initialHeight - MIN_HEIGHT
         binding.widthSeekBar.progress = initialWidth - MIN_WIDTH
+        binding.minesSeekBar.progress = initialMines - MIN_MINES
 
         return binding.root
     }
@@ -93,6 +99,6 @@ class GameSettingsDialog: DialogFragment() {
         return binding.widthSeekBar.progress + MIN_WIDTH
     }
     private fun getMines(): Int {
-        return 20
+        return binding.minesSeekBar.progress + MIN_MINES
     }
 }

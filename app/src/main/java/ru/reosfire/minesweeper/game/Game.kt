@@ -14,7 +14,7 @@ class Game(private val settings: GameSettings) {
     private val numbers = Array(settings.height) { IntArray(settings.width) }
     private var started = false
 
-    public fun getField(): Field {
+    fun getField(): Field {
         return field
     }
 
@@ -28,7 +28,15 @@ class Game(private val settings: GameSettings) {
 
         field.setAll(searchOpened(x, y))
 
-        return OpenResult.Win
+        var unsetCount = 0
+
+        for (i in 0 until settings.height) {
+            for (j in 0 until settings.width) {
+                if (field.get(i, j) !is NumberCell) unsetCount++
+            }
+        }
+
+        return if (unsetCount == settings.minesCount) OpenResult.Win else OpenResult.Updated
     }
 
     private fun searchOpened(startX: Int, startY: Int): List<Triple<Int, Int, Cell>> {
