@@ -4,7 +4,7 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
-import android.graphics.RectF
+import android.graphics.Rect
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
@@ -52,8 +52,8 @@ class FieldView @JvmOverloads constructor(
     }
 
 
-    private var cellSize = 0f
-    private var gridArea = RectF(0f, 0f, 0f, 0f)
+    private var cellSize = 0
+    private var gridArea = Rect(0, 0, 0, 0)
 
     private var selectedX = -1
     private var selectedY = -1
@@ -68,7 +68,7 @@ class FieldView @JvmOverloads constructor(
         val maxCellH = availH / field.height
         val maxCellW = availW / field.width
 
-        cellSize = min(maxCellH, maxCellW).toFloat()
+        cellSize = min(maxCellH, maxCellW)
 
         val gridHeight = cellSize * field.height
         val gridWidth = cellSize * field.width
@@ -79,12 +79,20 @@ class FieldView @JvmOverloads constructor(
         val left = emptyW / 2
         val top = emptyH / 2
 
-        gridArea = RectF(left, top, left + gridWidth, top + gridHeight)
+        gridArea = Rect(left, top, left + gridWidth, top + gridHeight)
     }
 
-    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+    private val rect = Rect()
+
+    private fun getRectForCell(i: Int, j: Int):Rect {
+        return rect.apply {
+            left = gridArea.left + j * cellSize
+            top = gridArea.top + i * cellSize
+            right = left + cellSize
+            bottom = top + cellSize
+        }
     }
+
     override fun onDraw(canvas: Canvas?) {
         if (canvas == null) return
         val field = gameField ?: return
@@ -93,18 +101,17 @@ class FieldView @JvmOverloads constructor(
             for (j in 0 until field.width) {
                 val paint = if ((i + j) % 2 == 0) backgroundColorFirst else backgroundColorSecond
 
-                canvas.drawRect(gridArea.left + j * cellSize, gridArea.top + i * cellSize,
-                    gridArea.left + (j + 1) * cellSize, gridArea.top + (i + 1) * cellSize, paint)
+                val rect = getRectForCell(i, j)
 
-                field.get(i, j).renderTo(canvas, gridArea.left + j * cellSize, gridArea.top + i * cellSize,
-                    gridArea.left + (j + 1) * cellSize, gridArea.top + (i + 1) * cellSize)
+                canvas.drawRect(rect, paint)
+
+                field.get(i, j).renderTo(canvas, rect.left, rect.top, rect.right, rect.bottom)
             }
         }
 
         if (!isInvalidSelected()) {
-            canvas.drawRect(selectedX * cellSize + gridArea.left, selectedY * cellSize + gridArea.top,
-                (selectedX + 1) * cellSize + gridArea.left, (selectedY + 1) * cellSize + gridArea.top,
-                highlightPaint)
+            val rect = getRectForCell(selectedY, selectedX)
+            canvas.drawRect(rect, highlightPaint)
         }
 
         super.onDraw(canvas)

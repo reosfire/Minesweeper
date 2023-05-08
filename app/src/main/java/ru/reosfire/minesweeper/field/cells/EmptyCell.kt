@@ -10,7 +10,7 @@ class EmptyCell: Cell() {
             color = Color.rgb(200, 0, 0)
         }
     }
-    override fun renderTo(canvas: Canvas, xStart: Float, yStart: Float, xEnd: Float, yEnd: Float) {
+    override fun renderTo(canvas: Canvas, xStart: Int, yStart: Int, xEnd: Int, yEnd: Int) {
 
     }
 }

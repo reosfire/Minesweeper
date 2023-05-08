@@ -21,7 +21,7 @@ class FlagCell: Cell() {
         private val vertices = FloatArray(6)
     }
 
-    override fun renderTo(canvas: Canvas, xStart: Float, yStart: Float, xEnd: Float, yEnd: Float) {
+    override fun renderTo(canvas: Canvas, xStart: Int, yStart: Int, xEnd: Int, yEnd: Int) {
         val w = xEnd - xStart
         val lineW = w * 0.1f
         val lineH = w * 0.8f
@@ -36,7 +36,7 @@ class FlagCell: Cell() {
         vertices[3] = centerH - lineH / 4
 
         vertices[4] = centerW - lineW / 2 + 1
-        vertices[5] = centerH
+        vertices[5] = centerH.toFloat()
 
         canvas.drawVertices(Canvas.VertexMode.TRIANGLES, vertices.size,
             vertices, 0,

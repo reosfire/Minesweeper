@@ -39,6 +39,7 @@ class MainFragment: Fragment() {
             val dialog = GameSettingsDialog.create(settings)
             dialog.setResultListener {
                 settings = it
+
             }
             dialog.show(childFragmentManager, "TAGTAG")
         }

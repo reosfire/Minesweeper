@@ -31,8 +31,12 @@ class NumberCell(private val number: Int): Cell() {
         private val bounds = Rect()
     }
 
-    override fun renderTo(canvas: Canvas, xStart: Float, yStart: Float, xEnd: Float, yEnd: Float) {
-        canvas.drawRect(xStart, yStart, xEnd, yEnd, zeroPaint)
+    override fun renderTo(canvas: Canvas, xStart: Int, yStart: Int, xEnd: Int, yEnd: Int) {
+        bounds.left = xStart
+        bounds.top = yStart
+        bounds.right = xEnd
+        bounds.bottom = yEnd
+        canvas.drawRect(bounds, zeroPaint)
 
         if (number == 0) return
 
@@ -47,6 +51,6 @@ class NumberCell(private val number: Int): Cell() {
 
         val numberH = bounds.bottom - bounds.top
         val emptyH = yEnd - numberH - yStart
-        canvas.drawText(number.toString(), (xStart + xEnd) / 2, yEnd - emptyH / 2, paint)
+        canvas.drawText(number.toString(), (xStart + xEnd) / 2f, yEnd - emptyH / 2f, paint)
     }
 }
