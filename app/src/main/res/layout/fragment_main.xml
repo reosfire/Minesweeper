@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                                                   xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-                                                   android:layout_height="match_parent">
+<androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             app:layout_constraintWidth_percent="0.8"
+            app:layout_constraintHeight_percent="0.6"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -18,8 +21,11 @@
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginEnd="10dp"
-                app:layout_constraintEnd_toStartOf="@id/gameSettingsButton"/>
+                app:layout_constraintEnd_toStartOf="@id/gameSettingsButton"
+                app:layout_constraintBottom_toTopOf="@id/gamesList"
+                app:layout_constraintVertical_chainStyle="packed"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                android:layout_marginEnd="10dp"/>
 
         <ImageButton
                 android:id="@+id/gameSettingsButton"
@@ -28,23 +34,28 @@
                 android:contentDescription="@string/openGameSettings"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toEndOf="@id/newGameButton"
+                app:layout_constraintTop_toTopOf="@+id/newGameButton"
                 app:layout_constraintEnd_toEndOf="parent"/>
 
         <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/gamesList"
-                android:text="@string/statsButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                app:layout_constrainedHeight="true"
                 app:layout_constraintTop_toBottomOf="@id/newGameButton"
                 app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginEnd="10dp"/>
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/statsButton"
+                android:layout_marginBottom="10dp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
         <Button android:id="@+id/statsButton"
                 android:text="@string/statsButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="@id/gamesList"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>
 

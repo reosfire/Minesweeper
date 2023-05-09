@@ -56,11 +56,11 @@ class GameFragment: Fragment() {
                 val openResult = game.open(y, x)
                 if (openResult == OpenResult.Loose) {
                     setupGame(settings)
-                    Toast.makeText(context, "LOOOSSSEE!!!", Toast.LENGTH_LONG).show()
+                    Toast.makeText(context, "LOOOSSSEE!!!", Toast.LENGTH_SHORT).show()
                 }
                 else if (openResult == OpenResult.Win){
                     setupGame(settings)
-                    Toast.makeText(context, "WWWIIIIIIINNN!!!", Toast.LENGTH_LONG).show()
+                    Toast.makeText(context, "WWWIIIIIIINNN!!!", Toast.LENGTH_SHORT).show()
                 }
             }
         }

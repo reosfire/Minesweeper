@@ -8,6 +8,10 @@ import kotlin.math.max
 import kotlin.math.min
 
 class Game(private val settings: GameSettings) {
+    companion object {
+
+    }
+
     private val random = Random()
     private val field = Field(settings.width, settings.height)
     private val mines = Array(settings.height) { BitSet(settings.width) }
@@ -16,6 +20,23 @@ class Game(private val settings: GameSettings) {
 
     fun getField(): Field {
         return field
+    }
+
+    fun getState(): GameState {
+        val cellCount = settings.cellsCount()
+        val minesString = CharArray(cellCount)
+        var k = 0
+        for (i in 0 until settings.height) {
+            for (j in 0 until settings.width) {
+                minesString[k] = if (mines[i][j]) '1' else '0'
+                k++
+            }
+        }
+
+        val fieldString = StringBuilder()
+
+
+        return GameState(settings.height, settings.width, minesString.concatToString(), fieldString.toString())
     }
 
     fun open(x: Int, y: Int): OpenResult {
