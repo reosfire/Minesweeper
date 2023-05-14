@@ -2,24 +2,26 @@ package ru.reosfire.minesweeper.game
 
 import ru.reosfire.minesweeper.field.Field
 import ru.reosfire.minesweeper.field.cells.Cell
+import ru.reosfire.minesweeper.field.cells.EmptyCell
+import ru.reosfire.minesweeper.field.cells.FlagCell
 import ru.reosfire.minesweeper.field.cells.NumberCell
 import java.util.*
 import kotlin.math.max
 import kotlin.math.min
 
 class Game(private val settings: GameSettings) {
-    companion object {
-
-    }
-
     private val random = Random()
     private val field = Field(settings.width, settings.height)
     private val mines = Array(settings.height) { BitSet(settings.width) }
     private val numbers = Array(settings.height) { IntArray(settings.width) }
     private var started = false
+    private var flags = 0
 
     fun getField(): Field {
         return field
+    }
+    fun getFlags(): Int {
+        return flags
     }
 
     fun getState(): GameState {
@@ -40,6 +42,8 @@ class Game(private val settings: GameSettings) {
     }
 
     fun open(x: Int, y: Int): OpenResult {
+        if (field.get(x, y) is FlagCell) return OpenResult.NothingChanged
+
         if (!started) {
             fillMinesWithout(x, y)
             calculateNumbers()
@@ -58,6 +62,17 @@ class Game(private val settings: GameSettings) {
         }
 
         return if (unsetCount == settings.minesCount) OpenResult.Win else OpenResult.Updated
+    }
+
+    fun toggleFlag(x: Int, y:Int) {
+        if (field.get(x, y) is FlagCell) {
+            field.set(x, y, EmptyCell())
+            flags--
+        }
+        else if (field.get(x, y) is EmptyCell) {
+            field.set(x, y, FlagCell())
+            flags++
+        }
     }
 
     private fun searchOpened(startX: Int, startY: Int): List<Triple<Int, Int, Cell>> {
