@@ -10,8 +10,7 @@ import ru.reosfire.minesweeper.game.GameState
 class SavedGamesAdapter(private val games: MutableList<GameState>): RecyclerView.Adapter<SavedGamesAdapter.SavedGameViewHolder>() {
     fun add(game: GameState) {
         games.add(game)
-        notifyDataSetChanged()
-        //notifyItemInserted(games.lastIndex)
+        notifyItemInserted(games.lastIndex)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SavedGameViewHolder {
