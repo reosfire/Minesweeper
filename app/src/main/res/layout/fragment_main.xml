@@ -30,7 +30,7 @@
         <ImageButton
                 android:id="@+id/gameSettingsButton"
                 android:background="@drawable/baseline_keyboard_arrow_down_24"
-                android:backgroundTint="@color/purple_200"
+                android:backgroundTint="?android:colorPrimary"
                 android:contentDescription="@string/openGameSettings"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
