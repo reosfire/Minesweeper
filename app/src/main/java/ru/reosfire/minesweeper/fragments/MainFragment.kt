@@ -23,6 +23,9 @@ class MainFragment: Fragment() {
     private lateinit var binding: FragmentMainBinding
     private lateinit var settings: GameSettings
     private var preferences: SharedPreferences? = null
+    private val gamesAdapter = SavedGamesAdapter(Array(1) {
+        GameState(10, 10, "a", "a", 1,1,false)
+    }.toMutableList())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,10 +41,7 @@ class MainFragment: Fragment() {
         binding = FragmentMainBinding.inflate(inflater, container, false)
 
         binding.newGameButton.setOnClickListener {
-            parentFragmentManager.commit {
-                addToBackStack(null)
-                replace(R.id.fragmentContainer, GameFragment.create(settings))
-            }
+            startGameFragment(GameFragment.create(settings))
         }
 
         binding.gameSettingsButton.setOnClickListener {
@@ -53,14 +53,28 @@ class MainFragment: Fragment() {
             dialog.show(childFragmentManager, "TAGTAG")
         }
 
-        val gamesAdapter = SavedGamesAdapter(Array(30) { GameState(10, 10, "asdfasdfasdf", "asdf") }.toMutableList())
+        gamesAdapter.setItemClickListener {
+            startGameFragment(GameFragment.create(it))
+        }
+
         binding.gamesList.adapter = gamesAdapter
 
         binding.statsButton.setOnClickListener {
-            gamesAdapter.add(GameState(1,1,"123123asdf", "123123asdf2134124fa"))
+            gamesAdapter.add(GameState(10, 10, "a", "a", 1,1,false) )
         }
 
         return binding.root
+    }
+
+    private fun startGameFragment(gameFragment: GameFragment) {
+        gameFragment.setGameEndListener {
+            gamesAdapter.add(it)
+        }
+
+        parentFragmentManager.commit {
+            addToBackStack(null)
+            replace(R.id.fragmentContainer, gameFragment)
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

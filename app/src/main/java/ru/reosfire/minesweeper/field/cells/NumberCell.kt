@@ -5,7 +5,7 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Rect
 
-class NumberCell(private val number: Int): Cell() {
+class NumberCell(val number: Int): Cell() {
     companion object {
         val paints = arrayOf(
             Paint(Paint.ANTI_ALIAS_FLAG).apply {
@@ -52,5 +52,9 @@ class NumberCell(private val number: Int): Cell() {
         val numberH = bounds.bottom - bounds.top
         val emptyH = yEnd - numberH - yStart
         canvas.drawText(number.toString(), (xStart + xEnd) / 2f, yEnd - emptyH / 2f, paint)
+    }
+
+    override fun typeString(): String {
+        return "number"
     }
 }

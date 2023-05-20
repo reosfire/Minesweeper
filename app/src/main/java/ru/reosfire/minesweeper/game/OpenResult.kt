@@ -3,5 +3,6 @@ package ru.reosfire.minesweeper.game
 enum class OpenResult {
     Win,
     Loose,
-    Updated
+    Updated, //Opened some numbers
+    NothingChanged //Open flag
 }
