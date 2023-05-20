@@ -3,11 +3,11 @@ package ru.reosfire.minesweeper.field
 import ru.reosfire.minesweeper.field.cells.Cell
 import ru.reosfire.minesweeper.field.cells.EmptyCell
 
-typealias FieldUpdateHandler = () -> Unit
+typealias FieldUpdateListener = () -> Unit
 
 class Field(val width: Int, val height: Int) {
     private val data = Array(height) { Array<Cell>(width) { EmptyCell() } }
-    private var updateHandler: FieldUpdateHandler? = null
+    private var updateHandler: FieldUpdateListener? = null
 
     fun get(x: Int, y: Int): Cell {
         return data[x][y]
@@ -24,7 +24,7 @@ class Field(val width: Int, val height: Int) {
         updateHandler?.invoke()
     }
 
-    fun subscribeToUpdates(handler: FieldUpdateHandler) {
+    fun subscribeToUpdates(handler: FieldUpdateListener) {
         updateHandler = handler
     }
     fun unsubscribeFromUpdates() {

@@ -49,4 +49,8 @@ class FlagCell: Cell() {
             0,
             paint)
     }
+
+    override fun typeString(): String {
+        return "flag"
+    }
 }

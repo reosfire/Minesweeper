@@ -13,4 +13,8 @@ class EmptyCell: Cell() {
     override fun renderTo(canvas: Canvas, xStart: Int, yStart: Int, xEnd: Int, yEnd: Int) {
 
     }
+
+    override fun typeString(): String {
+        return "empty"
+    }
 }
