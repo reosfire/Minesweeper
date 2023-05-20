@@ -57,16 +57,6 @@ class MainFragment: Fragment() {
             dialog.show(childFragmentManager, "TAGTAG")
         }
 
-        MainScope().launch {
-            withContext(Dispatchers.IO) {
-                for (gameState in db.games.getAll()) {
-                    MainScope().launch {
-                        gamesAdapter.add(gameState)
-                    }
-                }
-            }
-        }
-
         gamesAdapter.setItemClickListener {
             startGameFragment(GameFragment.create(it))
         }
@@ -82,6 +72,21 @@ class MainFragment: Fragment() {
         db = Room.databaseBuilder(context,
             GamesDatabase::class.java, "games_database"
         ).build()
+
+        MainScope().launch {
+            withContext(Dispatchers.IO) {
+                for (gameState in db.games.getAll()) {
+                    MainScope().launch {
+                        gamesAdapter.add(gameState)
+                    }
+                }
+            }
+        }
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        db.close()
     }
 
     private fun startGameFragment(gameFragment: GameFragment) {
