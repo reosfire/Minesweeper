@@ -1,4 +1,4 @@
-package ru.reosfire.minesweeper.fragments
+package ru.reosfire.minesweeper.views.fragments
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -11,7 +11,7 @@ import androidx.fragment.app.commit
 import ru.reosfire.minesweeper.R
 import ru.reosfire.minesweeper.SavedGamesAdapter
 import ru.reosfire.minesweeper.databinding.FragmentMainBinding
-import ru.reosfire.minesweeper.fragments.dialogs.GameSettingsDialog
+import ru.reosfire.minesweeper.views.fragments.dialogs.GameSettingsDialog
 import ru.reosfire.minesweeper.game.GameSettings
 import ru.reosfire.minesweeper.game.GameState
 

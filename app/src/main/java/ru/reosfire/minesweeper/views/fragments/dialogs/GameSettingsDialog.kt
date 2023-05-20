@@ -1,4 +1,4 @@
-package ru.reosfire.minesweeper.fragments.dialogs
+package ru.reosfire.minesweeper.views.fragments.dialogs
 
 import android.os.Bundle
 import android.view.LayoutInflater

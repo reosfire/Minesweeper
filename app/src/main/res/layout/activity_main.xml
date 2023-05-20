@@ -11,6 +11,6 @@
             android:id="@+id/fragmentContainer"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:name="ru.reosfire.minesweeper.fragments.MainFragment"
+            android:name="ru.reosfire.minesweeper.views.fragments.MainFragment"
             tools:layout="@layout/fragment_main"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

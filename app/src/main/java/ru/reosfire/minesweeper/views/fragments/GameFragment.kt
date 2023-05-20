@@ -1,4 +1,4 @@
-package ru.reosfire.minesweeper.fragments
+package ru.reosfire.minesweeper.views.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
