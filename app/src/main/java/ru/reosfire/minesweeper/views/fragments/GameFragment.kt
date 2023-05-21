@@ -39,11 +39,13 @@ class GameFragment: Fragment() {
 
     private lateinit var binding: FragmentGameBinding
     private var gameEndListener: GameEndListener? = null
+    private var game: Game? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentGameBinding.inflate(inflater, container, false)
 
         binding.backButton.setOnClickListener {
+            if (game != null && game!!.started) gameEndListener?.invoke(game!!.getState())
             parentFragmentManager.popBackStack()
         }
 
@@ -62,10 +64,12 @@ class GameFragment: Fragment() {
 
 
     private fun setupGame(settings: GameSettings) {
-        setupGame(Game(settings))
+        game = Game(settings)
+        setupGame(game!!)
     }
     private fun setupGame(state: GameState) {
-        setupGame(Game(state))
+        game = Game(state)
+        setupGame(game!!)
     }
     private fun setupGame(game: Game) {
         binding.gameField.gameField = game.field

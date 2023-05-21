@@ -29,7 +29,12 @@ class Game(val settings: GameSettings) {
     var completed = false
         private set
 
+    var stateId: Int = 0
+        private set
+
     constructor(state: GameState): this(state.getSettings()) {
+        stateId = state.id
+
         val minesJson = Json.decodeFromString<JsonArray>(state.minesJson)
         for (mineElement in minesJson) {
             val i = mineElement.jsonObject["i"]?.jsonPrimitive?.int ?: 0
@@ -95,7 +100,7 @@ class Game(val settings: GameSettings) {
             minesJson.toString(), fieldJson.toString(),
             creationTime,
             timer.seconds.value!!,
-            completed)
+            completed, stateId)
     }
 
     private fun openActually(x: Int, y: Int): OpenResult {

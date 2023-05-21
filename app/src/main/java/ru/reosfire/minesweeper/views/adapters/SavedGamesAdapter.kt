@@ -1,5 +1,6 @@
 package ru.reosfire.minesweeper.views.adapters
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,6 +23,12 @@ class SavedGamesAdapter(private val games: MutableList<GameState>): RecyclerView
         notifyItemInserted(games.lastIndex)
     }
 
+    fun set(value: Iterable<GameState>) {
+        games.clear()
+        games.addAll(value)
+        notifyDataSetChanged()
+    }
+
     fun setItemClickListener(listener: ItemClickListener) {
         itemClickListener = listener
     }
@@ -41,6 +48,7 @@ class SavedGamesAdapter(private val games: MutableList<GameState>): RecyclerView
             holder.setTime(time)
             holder.setSize(height, width)
             holder.setCreatedAtTime(creationTime)
+            holder.setBackground(completed)
         }
         holder.setOnClickListener {
             itemClickListener?.invoke(games[position])
@@ -57,6 +65,10 @@ class SavedGamesAdapter(private val games: MutableList<GameState>): RecyclerView
         }
         fun setSize(h: Int, w: Int) {
             binding.size.text = "${h}x${w}"
+        }
+        fun setBackground(completed: Boolean) {
+            val color = if (completed) Color.rgb(50, 10, 40) else Color.rgb(100, 20, 80)
+            binding.background.setBackgroundColor(color)
         }
 
         fun setOnClickListener(listener: View.OnClickListener) {
