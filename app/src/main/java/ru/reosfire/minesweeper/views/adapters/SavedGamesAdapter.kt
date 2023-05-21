@@ -1,4 +1,4 @@
-package ru.reosfire.minesweeper
+package ru.reosfire.minesweeper.views.adapters
 
 import android.view.LayoutInflater
 import android.view.View
@@ -7,6 +7,8 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import ru.reosfire.minesweeper.databinding.SavedGameItemBinding
 import ru.reosfire.minesweeper.game.GameState
+import java.text.DateFormat
+import java.util.*
 import kotlin.time.DurationUnit
 import kotlin.time.toDuration
 
@@ -35,17 +37,28 @@ class SavedGamesAdapter(private val games: MutableList<GameState>): RecyclerView
     }
 
     override fun onBindViewHolder(holder: SavedGameViewHolder, position: Int) {
-
-        holder.setText(games[position].time.toDuration(DurationUnit.SECONDS).toString())
+        with(games[position]) {
+            holder.setTime(time)
+            holder.setSize(height, width)
+            holder.setCreatedAtTime(creationTime)
+        }
         holder.setOnClickListener {
             itemClickListener?.invoke(games[position])
         }
     }
 
     class SavedGameViewHolder(private val binding: SavedGameItemBinding): ViewHolder(binding.root) {
-        fun setText(value: String) {
-            binding.createdAtText.text = value
+        fun setTime(time: Int) {
+            binding.time.text = time.toDuration(DurationUnit.SECONDS).toString()
         }
+        fun setCreatedAtTime(time: Long) {
+            val formatter = DateFormat.getDateTimeInstance()
+            binding.creationTime.text = formatter.format(Date(time))
+        }
+        fun setSize(h: Int, w: Int) {
+            binding.size.text = "${h}x${w}"
+        }
+
         fun setOnClickListener(listener: View.OnClickListener) {
             binding.root.setOnClickListener(listener)
         }
