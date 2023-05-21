@@ -6,17 +6,14 @@ import android.graphics.Paint
 
 class FlagCell: Cell() {
     companion object {
+        private val COLOR = Color.rgb(200, 40, 40)
+
         private val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-            color = Color.rgb(200, 40, 40)
+            color = COLOR
             style = Paint.Style.FILL
         }
 
-        private val colors = intArrayOf(Color.rgb(200, 10, 10),
-            Color.rgb(200, 10, 10),
-            Color.rgb(200, 10, 10),
-            Color.rgb(200, 10, 10),
-            Color.rgb(200, 10, 10),
-            Color.rgb(200, 10, 10))
+        private val colors = IntArray(6) { COLOR }
 
         private val vertices = FloatArray(6)
     }
