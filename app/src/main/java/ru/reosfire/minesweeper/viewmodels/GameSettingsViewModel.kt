@@ -17,10 +17,31 @@ class GameSettingsViewModel: ViewModel() {
     private val heightData = MutableStateFlow(DEFAULT_HEIGHT)
     private val widthData = MutableStateFlow(DEFAULT_WIDTH)
     private val minesData = MutableStateFlow(DEFAULT_MINES)
+    private val maxMinesData = MutableStateFlow(0)
 
     val height: StateFlow<Int> = heightData
     val width: StateFlow<Int> = widthData
     val mines: StateFlow<Int> = minesData
+    val maxMines: StateFlow<Int> = maxMinesData
+
+    init {
+        viewModelScope.launch {
+            height.collect{
+                maxMinesData.emit(height.value * width.value / 5 - 2)
+            }
+        }
+        viewModelScope.launch {
+            width.collect{
+                maxMinesData.emit(height.value * width.value / 5 - 2)
+            }
+        }
+
+        viewModelScope.launch {
+            maxMinesData.collect {
+                if (mines.value > it) minesData.emit(it)
+            }
+        }
+    }
 
     fun setHeight(value: Int) {
         viewModelScope.launch {

@@ -27,7 +27,7 @@ class GameSettingsDialog: DialogFragment() {
     companion object {
         private const val MIN_HEIGHT = 6
         private const val MIN_WIDTH = 6
-        private const val MIN_MINES = 6
+        private const val MIN_MINES = 1
     }
 
     private val viewModel: GameSettingsViewModel by activityViewModels<GameSettingsViewModel>()
@@ -71,6 +71,12 @@ class GameSettingsDialog: DialogFragment() {
             viewModel.mines.collect{
                 binding.minesValue.text = it.toString()
                 binding.minesSeekBar.progress = it - MIN_MINES
+            }
+        }
+
+        lifecycleScope.launchWhenCreated {
+            viewModel.maxMines.collect{
+                binding.minesSeekBar.max = it - MIN_MINES
             }
         }
 
