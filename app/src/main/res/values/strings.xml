@@ -8,4 +8,6 @@
     <string name="mines_label">Mines:</string>
     <string name="ok_button">OK</string>
     <string name="cancel_button">Cancel</string>
+    <string name="size">Size:</string>
+    <string name="time">Time:</string>
 </resources>

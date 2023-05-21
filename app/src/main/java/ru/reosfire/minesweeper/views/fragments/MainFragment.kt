@@ -9,16 +9,17 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.room.Room
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import ru.reosfire.minesweeper.GamesDatabase
 import ru.reosfire.minesweeper.R
-import ru.reosfire.minesweeper.SavedGamesAdapter
 import ru.reosfire.minesweeper.databinding.FragmentMainBinding
 import ru.reosfire.minesweeper.game.GameSettings
+import ru.reosfire.minesweeper.room.GamesDatabase
+import ru.reosfire.minesweeper.views.adapters.SavedGamesAdapter
 import ru.reosfire.minesweeper.views.fragments.dialogs.GameSettingsDialog
 
 class MainFragment: Fragment() {
@@ -61,7 +62,10 @@ class MainFragment: Fragment() {
             startGameFragment(GameFragment.create(it))
         }
 
-        binding.gamesList.adapter = gamesAdapter
+        with(binding.gamesList) {
+            adapter = gamesAdapter
+            addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
+        }
 
         return binding.root
     }
