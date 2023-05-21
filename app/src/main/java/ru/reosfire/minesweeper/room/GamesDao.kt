@@ -1,4 +1,4 @@
-package ru.reosfire.minesweeper
+package ru.reosfire.minesweeper.room
 
 import androidx.room.Dao
 import androidx.room.Insert
