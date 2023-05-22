@@ -37,15 +37,10 @@ class GameSettingsDialog: DialogFragment() {
         binding = FragmentGameSettingsDialogBinding.inflate(inflater, container, false)
         val initSettings = viewModel.getSettings()
 
-        binding.heightSeekBar.setProgressChangedListener { _, progress, _ ->
-            viewModel.setHeight(MIN_HEIGHT + progress)
-        }
-        binding.widthSeekBar.setProgressChangedListener { _, progress, _ ->
-            viewModel.setWidth(MIN_WIDTH + progress)
-        }
-        binding.minesSeekBar.setProgressChangedListener { _, progress, _ ->
-            viewModel.setMines(MIN_MINES + progress)
-        }
+        binding.minesSeekBar.max = viewModel.maxMines.value
+        binding.minesSeekBar.progress = MIN_MINES - viewModel.mines.value
+        binding.heightSeekBar.progress = MIN_HEIGHT - viewModel.height.value
+        binding.widthSeekBar.progress = MIN_WIDTH - viewModel.width.value
 
         binding.okButton.setOnClickListener {
             dismiss()
@@ -78,6 +73,16 @@ class GameSettingsDialog: DialogFragment() {
             viewModel.maxMines.collect{
                 binding.minesSeekBar.max = it - MIN_MINES
             }
+        }
+
+        binding.heightSeekBar.setProgressChangedListener { _, progress, _ ->
+            viewModel.setHeight(MIN_HEIGHT + progress)
+        }
+        binding.widthSeekBar.setProgressChangedListener { _, progress, _ ->
+            viewModel.setWidth(MIN_WIDTH + progress)
+        }
+        binding.minesSeekBar.setProgressChangedListener { _, progress, _ ->
+            viewModel.setMines(MIN_MINES + progress)
         }
 
         return binding.root
