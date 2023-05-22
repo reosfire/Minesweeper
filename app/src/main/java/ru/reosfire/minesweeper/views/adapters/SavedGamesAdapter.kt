@@ -6,7 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
+import ru.reosfire.minesweeper.R
 import ru.reosfire.minesweeper.databinding.SavedGameItemBinding
+import ru.reosfire.minesweeper.game.GameResult
 import ru.reosfire.minesweeper.game.GameState
 import java.text.DateFormat
 import java.util.*
@@ -48,7 +50,8 @@ class SavedGamesAdapter(private val games: MutableList<GameState>): RecyclerView
             holder.setTime(time)
             holder.setSize(height, width)
             holder.setCreatedAtTime(creationTime)
-            holder.setBackground(completed)
+            holder.setBackground(result.completed)
+            holder.setGameResult(result)
         }
         holder.setOnClickListener {
             itemClickListener?.invoke(games[position])
@@ -69,6 +72,23 @@ class SavedGamesAdapter(private val games: MutableList<GameState>): RecyclerView
         fun setBackground(completed: Boolean) {
             val color = if (completed) Color.rgb(50, 10, 40) else Color.rgb(100, 20, 80)
             binding.background.setBackgroundColor(color)
+        }
+        fun setGameResult(result: GameResult) {
+            when (result) {
+                GameResult.Win -> {
+                    with(binding.resultImage) {
+                        setImageResource(R.drawable.outline_check_circle_24)
+                        setColorFilter(Color.rgb(0, 240, 0))
+                    }
+                }
+                GameResult.Loose -> {
+                    with(binding.resultImage) {
+                        setImageResource(R.drawable.outline_cancel_24)
+                        setColorFilter(Color.rgb(240, 0, 0))
+                    }
+                }
+                GameResult.Pending -> return
+            }
         }
 
         fun setOnClickListener(listener: View.OnClickListener) {

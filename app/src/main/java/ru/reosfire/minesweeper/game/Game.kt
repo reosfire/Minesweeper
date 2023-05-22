@@ -26,7 +26,7 @@ class Game(val settings: GameSettings) {
         private set
     var creationTime = System.currentTimeMillis()
         private set
-    var completed = false
+    var gameResult = GameResult.Pending
         private set
 
     var stateId: Int = 0
@@ -61,10 +61,10 @@ class Game(val settings: GameSettings) {
         }
 
         creationTime = state.creationTime
-        completed = state.completed
+        gameResult = state.result
         timer = Timer(state.time)
 
-        if (!completed) timer.run(MainScope())
+        if (!gameResult.completed) timer.run(MainScope())
         started = true
     }
 
@@ -100,7 +100,7 @@ class Game(val settings: GameSettings) {
             minesJson.toString(), fieldJson.toString(),
             creationTime,
             timer.seconds.value!!,
-            completed, stateId)
+            gameResult, stateId)
     }
 
     private fun openActually(x: Int, y: Int): OpenResult {
@@ -130,8 +130,12 @@ class Game(val settings: GameSettings) {
     fun open(x: Int, y: Int): OpenResult {
         val result = openActually(x, y)
 
-        if (result == OpenResult.Win || result == OpenResult.Loose) {
-            completed = true
+        if (result == OpenResult.Win) {
+            gameResult = GameResult.Win
+            timer.stop()
+        }
+        else if (result == OpenResult.Loose) {
+            gameResult = GameResult.Loose
             timer.stop()
         }
 
