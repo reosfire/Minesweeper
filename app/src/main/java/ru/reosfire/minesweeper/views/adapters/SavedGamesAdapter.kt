@@ -79,15 +79,19 @@ class SavedGamesAdapter(private val games: MutableList<GameState>): RecyclerView
                     with(binding.resultImage) {
                         setImageResource(R.drawable.outline_check_circle_24)
                         setColorFilter(Color.rgb(0, 240, 0))
+                        visibility = View.VISIBLE
                     }
                 }
                 GameResult.Loose -> {
                     with(binding.resultImage) {
                         setImageResource(R.drawable.outline_cancel_24)
                         setColorFilter(Color.rgb(240, 0, 0))
+                        visibility = View.VISIBLE
                     }
                 }
-                GameResult.Pending -> return
+                GameResult.Pending -> {
+                    binding.resultImage.visibility = View.GONE
+                }
             }
         }
 

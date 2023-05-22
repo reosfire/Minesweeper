@@ -44,7 +44,7 @@ class MainFragment: Fragment() {
         }
 
         gamesAdapter.setItemClickListener {
-            if (it.completed) return@setItemClickListener
+            if (it.result.completed) return@setItemClickListener
             startGameFragment(GameFragment.create(it))
         }
 

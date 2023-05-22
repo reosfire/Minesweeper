@@ -23,7 +23,7 @@ class Migration1_2: AutoMigrationSpec {
                 db.update("game_state",
                     SQLiteDatabase.CONFLICT_NONE,
                     contentValuesOf(
-                        "result" to result
+                        "result" to result.name
                     ),
                     "id = ?",
                     arrayOf(id)
