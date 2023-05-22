@@ -16,7 +16,7 @@ data class GameState(
     val fieldJson: String,
     val creationTime: Long,
     val time: Int,
-    val completed: Boolean,
+    val result: GameResult,
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0
 ): Parcelable {
