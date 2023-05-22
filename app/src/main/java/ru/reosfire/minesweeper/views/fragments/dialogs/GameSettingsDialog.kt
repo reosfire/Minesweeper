@@ -1,5 +1,6 @@
 package ru.reosfire.minesweeper.views.fragments.dialogs
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +10,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import ru.reosfire.minesweeper.databinding.FragmentGameSettingsDialogBinding
+import ru.reosfire.minesweeper.game.GameSettings
 import ru.reosfire.minesweeper.viewmodels.GameSettingsViewModel
 
 typealias SeekBarProgressChangedListener = (SeekBar?, Int, Boolean) -> Unit
@@ -32,10 +34,11 @@ class GameSettingsDialog: DialogFragment() {
 
     private val viewModel: GameSettingsViewModel by activityViewModels<GameSettingsViewModel>()
     private lateinit var binding: FragmentGameSettingsDialogBinding
+    private lateinit var initSettings: GameSettings
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentGameSettingsDialogBinding.inflate(inflater, container, false)
-        val initSettings = viewModel.getSettings()
+        initSettings = viewModel.getSettings()
 
         binding.minesSeekBar.max = viewModel.maxMines.value
         binding.minesSeekBar.progress = MIN_MINES - viewModel.mines.value
@@ -44,10 +47,10 @@ class GameSettingsDialog: DialogFragment() {
 
         binding.okButton.setOnClickListener {
             dismiss()
+            viewModel.saveToPreferences()
         }
         binding.cancelButton.setOnClickListener {
-            viewModel.setSettings(initSettings)
-            dismiss()
+            dialog?.cancel()
         }
 
         lifecycleScope.launchWhenCreated {
@@ -86,5 +89,10 @@ class GameSettingsDialog: DialogFragment() {
         }
 
         return binding.root
+    }
+
+    override fun onCancel(dialog: DialogInterface) {
+        super.onCancel(dialog)
+        viewModel.setSettings(initSettings)
     }
 }

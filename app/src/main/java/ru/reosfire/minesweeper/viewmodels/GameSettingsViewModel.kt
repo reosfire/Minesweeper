@@ -1,19 +1,24 @@
 package ru.reosfire.minesweeper.viewmodels
 
-import android.util.Log
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import android.content.Context
+import android.content.SharedPreferences
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import ru.reosfire.minesweeper.game.GameSettings
 
-class GameSettingsViewModel: ViewModel() {
+class GameSettingsViewModel(application: Application): AndroidViewModel(application) {
     companion object {
+        private const val SETTINGS_KEY = "game_settings"
         private const val DEFAULT_HEIGHT = 15
         private const val DEFAULT_WIDTH = 10
         private const val DEFAULT_MINES = 10
     }
+
+    private val preferences: SharedPreferences
 
     private val heightData = MutableStateFlow(DEFAULT_HEIGHT)
     private val widthData = MutableStateFlow(DEFAULT_WIDTH)
@@ -26,23 +31,23 @@ class GameSettingsViewModel: ViewModel() {
     val maxMines: StateFlow<Int> = maxMinesData
 
     init {
+        preferences = application.getSharedPreferences(SETTINGS_KEY, Context.MODE_PRIVATE)
+        setSettings(GameSettings.fromSharedPrefs(preferences, SETTINGS_KEY, getSettings()))
+
         viewModelScope.launch {
             maxMinesData.collect {
                 if (mines.value > it) minesData.emit(it)
-                Log.d("Flows", "maxMines: $it   ${mines.value}")
             }
         }
 
         viewModelScope.launch {
             height.collect{
                 maxMinesData.emit(height.value * width.value / 5 - 2)
-                Log.d("Flows", "height: $it   ${width.value}")
             }
         }
         viewModelScope.launch {
             width.collect{
                 maxMinesData.emit(height.value * width.value / 5 - 2)
-                Log.d("Flows", "width: $it   ${height.value}")
             }
         }
     }
@@ -50,21 +55,22 @@ class GameSettingsViewModel: ViewModel() {
     fun setHeight(value: Int) {
         viewModelScope.launch {
             heightData.emit(value)
-            Log.e("Flows emit", "height: $value")
         }
     }
     fun setWidth(value: Int) {
         viewModelScope.launch {
             widthData.emit(value)
-            Log.e("Flows emit", "width: $value")
         }
     }
 
     fun setMines(value: Int) {
         viewModelScope.launch {
             minesData.emit(value)
-            Log.e("Flows emit", "mines: $value")
         }
+    }
+
+    fun saveToPreferences() {
+        getSettings().saveToSharedPreferences(preferences, SETTINGS_KEY)
     }
 
     fun setSettings(settings: GameSettings) {
